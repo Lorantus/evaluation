@@ -19,6 +19,7 @@ export class Evaluator {
         const variables = {
             ...evaluation.getVariables(),
         };
+        
         let formula;
         if (Object.keys(variables).length) {
             const hasAtLeastOneValue = Object.keys(variables)

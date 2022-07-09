@@ -3,10 +3,11 @@ import { Evaluator } from "./Evaluator";
 import { Expression } from "./Expression";
 import { IfExpression } from "./IfExpression";
 import { Nombre } from "./Nombre";
-import { TestOperation } from "./TestOperation";
+import { BooleanOperation } from "./BooleanOperation";
 import { createValue, ValueNotApplicable } from "./Value";
 import { Variable } from "./Variable";
 import { VariableType } from "./VariableType";
+import { BooleanFunction } from "./BooleanFunction";
 
 function calculer(expression: Expression) {
     console.log("---------------------------------")
@@ -27,8 +28,27 @@ function calculer(expression: Expression) {
 }
 
 calculer(
+    new ArithmetiqueOperation(
+        new Nombre("2"),
+        "*",
+        new BooleanFunction("AND", [
+            new BooleanOperation(
+                new Nombre("1"),
+                "=",
+                new Nombre("1")
+            ),
+            new BooleanOperation(
+                new Variable("a"),
+                "=",
+                new Nombre("2")
+            )
+        ])
+    )
+);
+
+calculer(
     new IfExpression(
-        new TestOperation(
+        new BooleanOperation(
             new ArithmetiqueOperation(
                 new Nombre("2"),
                 "+",
@@ -54,7 +74,7 @@ calculer(
 
 calculer(
     new IfExpression(
-        new TestOperation(
+        new BooleanOperation(
             new ArithmetiqueOperation(
                 new Nombre("2"),
                 "+",
@@ -82,7 +102,7 @@ calculer(
     new ArithmetiqueOperation(
         new Nombre("2"),
         "*",
-        new TestOperation(
+        new BooleanOperation(
             new Nombre("2"),
             "=",
             new Nombre("1")

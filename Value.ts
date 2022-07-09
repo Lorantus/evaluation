@@ -41,7 +41,7 @@ class ValueImpl implements Value {
   }
 }
 
-export function createValue(value: number) {
+export function createValue(value: number): Value {
     return new ValueImpl(value, 'VALUE');
 }
 

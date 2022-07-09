@@ -11,8 +11,7 @@ export class ArithmetiqueOperation implements Expression {
   constructor(
     private readonly left: Expression,
     private readonly operation: OperationArithmetique,
-    private readonly right: Expression
-  ) {}
+    private readonly right: Expression) {}
 
   evaluate(evaluator: Evaluator): Evaluation {
     return new Evaluation()
