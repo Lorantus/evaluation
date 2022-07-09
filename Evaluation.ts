@@ -1,4 +1,3 @@
-import { Evaluator } from "./Evaluator";
 import { Value } from "./Value";
 import { VariableType } from "./VariableType";
 
@@ -14,10 +13,6 @@ export class Evaluation {
 
     getVariables() {
         return this.variables;
-    }
-
-    evaluateValue(evaluator: Evaluator): Value {
-        return evaluator.evaluateValue(this);
     }
 
     appendEvaluation(evaluation: Evaluation) {

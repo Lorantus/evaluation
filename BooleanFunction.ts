@@ -1,4 +1,5 @@
-import { BooleanOperation, createBooleanValue, evaluateBooleanValue } from "./BooleanOperation";
+import { BooleanOperation, createBooleanValue } from "./BooleanOperation";
+import { booleanValueVoter } from "./BooleanValueVoter";
 import { Evaluation } from "./Evaluation";
 import { Evaluator } from "./Evaluator";
 import { Expression } from "./Expression";
@@ -6,7 +7,7 @@ import { createValue, Value } from "./Value";
 
 export type BooleanFunctionType = "AND" | "OR" | "NOT";
 
-const functionRepository: {
+const fonctionsRepository: {
     [k in BooleanFunctionType]: {
         apply: (left: Value, right: Value) => boolean
     }
@@ -28,13 +29,13 @@ export class BooleanFunction implements Expression {
         private readonly tests: BooleanOperation[]) {}
 
     evaluate(evaluator: Evaluator): Evaluation {
-        const appyFunction = functionRepository[this.name];
+        const fonction = fonctionsRepository[this.name];
         const value = this.tests.reduce((acc, test) => {
             const testValue = test.evaluateValue(evaluator);
             if(!(testValue.isValue() && acc.isValue())) {
-                return evaluateBooleanValue(testValue, acc);
+                return booleanValueVoter(testValue, acc);
             } else {
-                const result = appyFunction.apply(acc, testValue);
+                const result = fonction.apply(acc, testValue);
                 return createBooleanValue(result);
             }
         }, createValue(1));
@@ -44,6 +45,6 @@ export class BooleanFunction implements Expression {
     }
 
     evaluateValue(evaluator: Evaluator): Value {
-        return this.evaluate(evaluator).evaluateValue(evaluator);
+        return evaluator.evaluateValue(this);
     }
 }

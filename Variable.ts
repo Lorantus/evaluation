@@ -1,6 +1,4 @@
-import { Evaluable } from "./Evaluable";
 import { Evaluation } from "./Evaluation";
-import { Evaluationable } from "./Evaluationable";
 import { Evaluator } from "./Evaluator";
 import { Expression } from "./Expression";
 import { Value } from "./Value";
@@ -15,6 +13,6 @@ export class Variable implements Expression {
     }
 
     evaluateValue(evaluator: Evaluator): Value {
-        return this.evaluate(evaluator).evaluateValue(evaluator);
+        return evaluator.evaluateValue(this);
     }
 }

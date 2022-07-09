@@ -1,6 +1,6 @@
 import { Evaluation } from "./Evaluation";
+import { Evaluationable } from "./Evaluationable";
 import { createValue, Value, valueNotComputable } from "./Value";
-import { Variable } from "./Variable";
 import { VariableType } from "./VariableType";
 
 function applyEvaluation(formula: string) {
@@ -15,7 +15,12 @@ export class Evaluator {
         return this.userVariables["c_" + variableName];
     }
 
-    public evaluateValue(evaluation: Evaluation): Value {
+    public evaluateValue(evaluationable: Evaluationable): Value {
+        const evaluation = evaluationable.evaluate(this);
+        return this.evaluateEvaluation(evaluation);
+    }
+
+    public evaluateEvaluation(evaluation: Evaluation): Value {
         const variables = {
             ...evaluation.getVariables(),
         };

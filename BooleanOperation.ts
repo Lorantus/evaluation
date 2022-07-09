@@ -1,9 +1,9 @@
-import { Evaluable } from "./Evaluable";
+import { booleanValueVoter } from "./BooleanValueVoter";
 import { Evaluation } from "./Evaluation";
 import { Evaluationable } from "./Evaluationable";
 import { Evaluator } from "./Evaluator";
 import { Expression } from "./Expression";
-import { createValue, Value, ValueType } from "./Value";
+import { createValue, Value} from "./Value";
 
 export type OperationBoolean = "=" | "<" | ">" | "<>" | "<=" | ">=";
 
@@ -17,20 +17,6 @@ const operationRepository: {
     "<=": (left, right) => left <= right,
     ">=": (left, right) => left >= right,
 };
-
-const typesOrder: ValueType[] = ["NOT_APPLICABLE", "NOT_COMPUTABLE", "NOT_ENTERED", "NOT_AVIAIBLE"];
-
-export function evaluateBooleanValue(left: Value, right: Value) {
-        let leftIndex = typesOrder.findIndex(typeOrder => typeOrder === left.getType());
-        let rightIndex = typesOrder.findIndex(typeOrder => typeOrder === right.getType());
-        if(leftIndex < 0) {
-            return right;
-        }
-        if(rightIndex < 0) {
-            return left;
-        }
-        return leftIndex <= rightIndex ? left : right;
-}
 
 export function createBooleanValue(value: boolean) {
     return createValue(value ? 1 : 0);
@@ -49,11 +35,11 @@ export class BooleanOperation implements Expression {
     }
 
     evaluateValue(evaluator: Evaluator): Value {
-        const left = evaluator.evaluateValue(this.left.evaluate(evaluator));
-        const right = evaluator.evaluateValue(this.right.evaluate(evaluator));
+        const left = evaluator.evaluateValue(this.left);
+        const right = evaluator.evaluateValue(this.right);
 
         if(!(left.isValue() && right.isValue())) {
-            return evaluateBooleanValue(left, right);
+            return booleanValueVoter(left, right);
         }
     
         const result = operationRepository[this.operation](left.getValue(), right.getValue());
