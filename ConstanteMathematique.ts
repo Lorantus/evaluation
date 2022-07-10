@@ -4,12 +4,12 @@ import { Evaluator } from "./Evaluator";
 import { createValue, Value } from "./Value";
 
 const constantesRepository = {
-    'true': createValue(1),
-    'false': createValue(0)
+    'pi': createValue(3.141592653),
+    'e': createValue(2.718281828)
 }
 
-export class Constante implements Evaluationable {
-    constructor(private readonly value) {}
+export class ConstanteMathematique implements Evaluationable {
+    constructor(private readonly value: string) {}
 
     evaluate(evaluator: Evaluator): Evaluation {
         if(constantesRepository[this.value]) {
@@ -18,9 +18,5 @@ export class Constante implements Evaluationable {
         }
         return new Evaluation()
             .appendToFormula(this.value);
-    }
-
-    evaluateValue(evaluator: Evaluator): Value {
-        return evaluator.evaluateValue(this);
     }
 }

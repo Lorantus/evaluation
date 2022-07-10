@@ -1,3 +1,4 @@
+import { BooleanExpression } from "./BooleanExpression";
 import { BooleanOperation, createBooleanValue } from "./BooleanOperation";
 import { booleanValueVoter } from "./BooleanValueVoter";
 import { Evaluation } from "./Evaluation";
@@ -23,12 +24,12 @@ const fonctionsRepository: {
     }
 }
 
-export class BooleanFunction implements Expression {
+export class BooleanFunction implements BooleanExpression {
     constructor(
         private readonly name: BooleanFunctionType,
         private readonly tests: BooleanOperation[]) {}
 
-    evaluate(evaluator: Evaluator): Evaluation {
+    evaluateValue(evaluator: Evaluator): Value {
         const fonction = fonctionsRepository[this.name];
         const value = this.tests.reduce((acc, test) => {
             const testValue = test.evaluateValue(evaluator);
@@ -40,11 +41,6 @@ export class BooleanFunction implements Expression {
             }
         }, createValue(1));
 
-        return new Evaluation()
-            .appendValue(value);
-    }
-
-    evaluateValue(evaluator: Evaluator): Value {
-        return evaluator.evaluateValue(this);
+        return value;
     }
 }

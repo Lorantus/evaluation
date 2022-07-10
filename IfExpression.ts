@@ -1,3 +1,4 @@
+import { BooleanExpression } from "./BooleanExpression";
 import { Evaluation } from "./Evaluation";
 import { Evaluator } from "./Evaluator";
 import { Expression } from "./Expression";
@@ -5,7 +6,7 @@ import { Value } from "./Value";
 
 export class IfExpression implements Expression {
     constructor(
-        private readonly test: Expression,
+        private readonly test: BooleanExpression,
         private readonly leftExpression: Expression,
         private readonly rightExpression: Expression) {}
 

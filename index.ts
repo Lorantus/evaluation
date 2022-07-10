@@ -2,12 +2,13 @@ import { ArithmetiqueOperation } from "./ArithmetiqueOperation";
 import { Evaluator } from "./Evaluator";
 import { Expression } from "./Expression";
 import { IfExpression } from "./IfExpression";
-import { Constante } from "./Constante";
+import { ConstanteMathematique } from "./ConstanteMathematique";
 import { BooleanOperation } from "./BooleanOperation";
 import { createValue, ValueNotApplicable } from "./Value";
 import { Variable } from "./Variable";
 import { VariableType } from "./VariableType";
 import { BooleanFunction } from "./BooleanFunction";
+import { ConstanteBooleenne } from "./ConstanteBooleenne";
 
 function calculer(expression: Expression) {
     console.log("---------------------------------")
@@ -30,20 +31,24 @@ function calculer(expression: Expression) {
 
 calculer(
     new ArithmetiqueOperation(
-        new Constante("2"),
+        new ConstanteMathematique("2"),
         "*",
-        new BooleanFunction("AND", [
-            new BooleanOperation(
-                new Constante("1"),
-                "=",
-                new Constante("1")
-            ),
-            new BooleanOperation(
-                new Variable("a"),
-                "=",
-                new Constante("2")
-            )
-        ])
+        new IfExpression(
+            new BooleanFunction("AND", [
+                new BooleanOperation(
+                    new ConstanteMathematique("1"),
+                    "=",
+                    new ConstanteMathematique("1")
+                ),
+                new BooleanOperation(
+                    new Variable("a"),
+                    "=",
+                    new ConstanteMathematique("2")
+                )
+            ]),
+            new ConstanteMathematique("1"),
+            new ConstanteMathematique("0")
+        )
     )
 );
 
@@ -51,9 +56,9 @@ calculer(
     new IfExpression(
         new BooleanOperation(
             new ArithmetiqueOperation(
-                new Constante("2"),
+                new ConstanteMathematique("2"),
                 "+",
-                new Constante("1")),
+                new ConstanteMathematique("1")),
             "=",
             new ArithmetiqueOperation(
                 new Variable("a"),
@@ -68,7 +73,7 @@ calculer(
         new ArithmetiqueOperation(
             new Variable("d"),
             "+",
-            new Constante("40")
+            new ConstanteMathematique("40")
         )
     )
 );
@@ -77,9 +82,9 @@ calculer(
     new IfExpression(
         new BooleanOperation(
             new ArithmetiqueOperation(
-                new Constante("2"),
+                new ConstanteMathematique("2"),
                 "+",
-                new Constante("1")),
+                new ConstanteMathematique("1")),
             "<>",
             new ArithmetiqueOperation(
                 new Variable("a"),
@@ -94,26 +99,30 @@ calculer(
         new ArithmetiqueOperation(
             new Variable("d"),
             "+",
-            new Constante("40")
+            new ConstanteMathematique("40")
         )
     )
 );
 
 calculer(
     new ArithmetiqueOperation(
-        new Constante("2"),
+        new ConstanteMathematique("e"),
         "*",
-        new BooleanOperation(
-            new Constante("2"),
-            "=",
-            new Constante("1")
+        new IfExpression(
+            new BooleanOperation(
+                new ConstanteMathematique("2"),
+                "=",
+                new ConstanteMathematique("2")
+            ),
+            new ConstanteMathematique("1"),
+            new ConstanteMathematique("0")
         )
     )
 );
 
 calculer(
     new IfExpression(
-        new Constante("false"),
+        new ConstanteBooleenne("false"),
         new ArithmetiqueOperation(
             new Variable("c"),
             "+",
@@ -122,7 +131,7 @@ calculer(
         new ArithmetiqueOperation(
             new Variable("d"),
             "+",
-            new Constante("50")
+            new ConstanteMathematique("50")
         )
     )
 );

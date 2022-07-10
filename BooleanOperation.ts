@@ -1,3 +1,4 @@
+import { BooleanExpression } from "./BooleanExpression";
 import { booleanValueVoter } from "./BooleanValueVoter";
 import { Evaluation } from "./Evaluation";
 import { Evaluationable } from "./Evaluationable";
@@ -22,17 +23,11 @@ export function createBooleanValue(value: boolean) {
     return createValue(value ? 1 : 0);
 }
 
-export class BooleanOperation implements Expression {
+export class BooleanOperation implements BooleanExpression {
     constructor(
         private readonly left: Evaluationable, 
         private readonly operation: OperationBoolean,
         private readonly right: Evaluationable) {}
-
-    evaluate(evaluator: Evaluator): Evaluation {
-        const value = this.evaluateValue(evaluator);
-        return new Evaluation()
-            .appendValue(value);
-    }
 
     evaluateValue(evaluator: Evaluator): Value {
         const left = evaluator.evaluateValue(this.left);
