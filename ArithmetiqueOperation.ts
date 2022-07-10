@@ -6,19 +6,19 @@ import { Value } from "./Value";
 export type OperationArithmetique = "+" | "-" | "*" | "/" | "%";
 
 export class ArithmetiqueOperation implements Expression {
-  constructor(
-    private readonly left: Expression,
-    private readonly operation: OperationArithmetique,
-    private readonly right: Expression) {}
+    constructor(
+        private readonly left: Expression,
+        private readonly operation: OperationArithmetique,
+        private readonly right: Expression) { }
 
-  evaluate(evaluator: Evaluator): Evaluation {
-    return new Evaluation()
-      .appendEvaluation(this.left.evaluate(evaluator))
-      .appendToFormula(this.operation)
-      .appendEvaluation(this.right.evaluate(evaluator));
-  }
+    evaluate(evaluator: Evaluator<number>): Evaluation<number> {
+        return new Evaluation()
+            .appendEvaluation(this.left.evaluate(evaluator))
+            .appendToFormula(this.operation)
+            .appendEvaluation(this.right.evaluate(evaluator));
+    }
 
-  evaluateValue(evaluator: Evaluator): Value {
-    return evaluator.evaluateValue(this);
-  }
+    evaluateValue(evaluator: Evaluator<number>): Value<number> {
+        return evaluator.evaluateValue(this);
+    }
 }

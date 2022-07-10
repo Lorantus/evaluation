@@ -5,20 +5,14 @@ export type ValueType =
     | "NOT_COMPUTABLE"
     | "VALUE";
 
-export interface Value {
-    getValue(): number;
-    getType(): ValueType;
-    isValue(): boolean;
-}
-
-class ValueImpl implements Value {
+export class Value<T> {
     constructor(
-        private readonly value: number,
+        private readonly value: T,
         private readonly type: ValueType
     ) { }
 
     getValue() {
-        return this.isValue() ? this.value : 0;
+        return this.value;
     }
 
     isValue() {
@@ -29,7 +23,7 @@ class ValueImpl implements Value {
         return this.type;
     }
 
-    equals(other: Value) {
+    equals(other: Value<T>) {
         return other == this ||
             (other &&
                 this.type === other.getType() &&
@@ -41,11 +35,11 @@ class ValueImpl implements Value {
     }
 }
 
-export function createValue(value: number): Value {
-    return new ValueImpl(value, 'VALUE');
-}
+export const ValueNotApplicable = new Value<null>(null, 'NOT_APPLICABLE');
+export const valueNotEntered = new Value<null>(null, 'NOT_ENTERED');
+export const valueNotAviaible = new Value<null>(null, 'NOT_AVIAIBLE');
+export const valueNotComputable = new Value<null>(null, 'NOT_COMPUTABLE');
 
-export const ValueNotApplicable: Value = new ValueImpl(null, 'NOT_APPLICABLE');
-export const valueNotEntered: Value = new ValueImpl(null, 'NOT_ENTERED');
-export const valueNotAviaible: Value = new ValueImpl(null, 'NOT_AVIAIBLE');
-export const valueNotComputable: Value = new ValueImpl(null, 'NOT_COMPUTABLE');
+export function createValue<T>(value: T): Value<T> {
+    return new Value<T>(value, 'VALUE');
+}

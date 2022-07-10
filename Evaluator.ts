@@ -8,19 +8,23 @@ function applyEvaluation(formula: string) {
     return eval(formula);
 }
 
-export class Evaluator {
+export class Evaluator<T> {
     constructor(private readonly userVariables: VariableType) { }
 
-    public getUserVariable(variableName: string): Value {
+    static createEvaluator<V>(evaluator: Evaluator<any>) {
+        return new Evaluator<V>(evaluator.userVariables);
+    }
+
+    public getUserVariable(variableName: string): Value<T> {
         return this.userVariables["c_" + variableName];
     }
 
-    public evaluateValue(evaluationable: Evaluationable): Value {
+    public evaluateValue(evaluationable: Evaluationable<T>): Value<T> {
         const evaluation = evaluationable.evaluate(this);
         return this.evaluateEvaluation(evaluation);
     }
 
-    public evaluateEvaluation(evaluation: Evaluation): Value {
+    public evaluateEvaluation(evaluation: Evaluation<T>): Value<T> {
         const variables = {
             ...evaluation.getVariables(),
         };

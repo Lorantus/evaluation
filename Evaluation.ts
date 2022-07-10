@@ -1,7 +1,7 @@
 import { Value } from "./Value";
 import { VariableType } from "./VariableType";
 
-export class Evaluation {
+export class Evaluation<T> {
     constructor(
         private readonly formula: string = "",
         private readonly variables: VariableType = {}
@@ -15,7 +15,7 @@ export class Evaluation {
         return this.variables;
     }
 
-    appendEvaluation(evaluation: Evaluation) {
+    appendEvaluation(evaluation: Evaluation<T>) {
         return new Evaluation(this.formula + evaluation.formula, {...this.variables, ...evaluation.variables});
     }
 
@@ -23,12 +23,12 @@ export class Evaluation {
         return new Evaluation(this.formula + partial, {...this.variables});
     }
 
-    appendVariable(variableName: string, value: Value) {
+    appendVariable(variableName: string, value: Value<T>) {
         const name = "c_" + variableName;
         return new Evaluation(this.formula + name, {...this.variables, [name]: value});
     }
 
-    appendValue(value: Value) {
+    appendValue(value: Value<T>) {
         const variableName = "v_" + this.createVariableName(3);
         return new Evaluation(this.formula + variableName, {...this.variables, [variableName]: value});
     }

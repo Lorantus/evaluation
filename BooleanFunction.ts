@@ -1,25 +1,27 @@
 import { BooleanExpression } from "./BooleanExpression";
-import { BooleanOperation, createBooleanValue } from "./BooleanOperation";
+import { BooleanOperation } from "./BooleanOperation";
 import { booleanValueVoter } from "./BooleanValueVoter";
-import { Evaluation } from "./Evaluation";
 import { Evaluator } from "./Evaluator";
-import { Expression } from "./Expression";
 import { createValue, Value } from "./Value";
 
 export type BooleanFunctionType = "AND" | "OR" | "NOT";
 
 const fonctionsRepository: {
     [k in BooleanFunctionType]: {
-        apply: (left: Value, right: Value) => boolean
+        readonly initialValue: Value<boolean>,
+        apply: (left: Value<boolean>, right: Value<boolean>) => boolean
     }
 } = {
     "AND": {
+        initialValue: createValue<boolean>(true),
         apply: (left, right) => !!(left.getValue() && right.getValue())
     },
     "OR": {
+        initialValue: createValue<boolean>(false),
         apply: (left, right) => !!(left.getValue() || right.getValue())
     },
     "NOT": {
+        initialValue: createValue<boolean>(true),
         apply: (left, right) => !left.getValue()
     }
 }
@@ -29,7 +31,7 @@ export class BooleanFunction implements BooleanExpression {
         private readonly name: BooleanFunctionType,
         private readonly tests: BooleanOperation[]) {}
 
-    evaluateValue(evaluator: Evaluator): Value {
+    evaluateValue(evaluator: Evaluator<boolean>): Value<boolean> {
         const fonction = fonctionsRepository[this.name];
         const value = this.tests.reduce((acc, test) => {
             const testValue = test.evaluateValue(evaluator);
@@ -37,9 +39,9 @@ export class BooleanFunction implements BooleanExpression {
                 return booleanValueVoter(testValue, acc);
             } else {
                 const result = fonction.apply(acc, testValue);
-                return createBooleanValue(result);
+                return createValue(result);
             }
-        }, createValue(1));
+        }, fonction.initialValue);
 
         return value;
     }

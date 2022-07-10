@@ -1,6 +1,6 @@
 import { Evaluation } from "./Evaluation";
-import { Evaluationable } from "./Evaluationable";
 import { Evaluator } from "./Evaluator";
+import { Expression } from "./Expression";
 import { createValue, Value } from "./Value";
 
 const constantesRepository = {
@@ -8,15 +8,19 @@ const constantesRepository = {
     'e': createValue(2.718281828)
 }
 
-export class ConstanteMathematique implements Evaluationable {
+export class ConstanteMathematique implements Expression {
     constructor(private readonly value: string) {}
 
-    evaluate(evaluator: Evaluator): Evaluation {
+    evaluate(evaluator: Evaluator<number>): Evaluation<number> {
         if(constantesRepository[this.value]) {
             return new Evaluation()
                 .appendToFormula(constantesRepository[this.value])
         }
         return new Evaluation()
             .appendToFormula(this.value);
+    }
+
+    evaluateValue(evaluator: Evaluator<number>): Value<number> {
+        return evaluator.evaluateValue(this);
     }
 }

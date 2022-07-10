@@ -19,7 +19,7 @@ function calculer(expression: Expression) {
         "c_d": createValue(4)
     };
 
-    const evaluator = new Evaluator(userVariables);
+    const evaluator = new Evaluator<number>(userVariables);
 
     const evaluation = expression.evaluate(evaluator);
 
@@ -55,15 +55,24 @@ calculer(
 calculer(
     new IfExpression(
         new BooleanOperation(
-            new ArithmetiqueOperation(
-                new ConstanteMathematique("2"),
-                "+",
-                new ConstanteMathematique("1")),
+            new IfExpression(
+                new BooleanFunction("AND", [
+                    new BooleanOperation(
+                        new ConstanteMathematique("1"),
+                        "=",
+                        new ConstanteMathematique("1")
+                    ),
+                    new BooleanOperation(
+                        new Variable("a"),
+                        "=",
+                        new ConstanteMathematique("2")
+                    )
+                ]),
+                new ConstanteMathematique("1"),
+                new ConstanteMathematique("0")
+            ),
             "=",
-            new ArithmetiqueOperation(
-                new Variable("a"),
-                "+",
-                new Variable("b"))
+            new ConstanteMathematique("1")
         ),
         new ArithmetiqueOperation(
             new Variable("c"),

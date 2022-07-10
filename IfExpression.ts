@@ -10,8 +10,8 @@ export class IfExpression implements Expression {
         private readonly leftExpression: Expression,
         private readonly rightExpression: Expression) {}
 
-    evaluate(evaluator: Evaluator): Evaluation {
-        const test = this.test.evaluateValue(evaluator);
+    evaluate(evaluator: Evaluator<number>): Evaluation<number> {
+        const test = this.test.evaluateValue(Evaluator.createEvaluator<boolean>(evaluator));
         if(test.isValue()) {
             const expression = (test.getValue() ? this.leftExpression : this.rightExpression);
             const value = evaluator.evaluateValue(expression);
@@ -24,7 +24,7 @@ export class IfExpression implements Expression {
         }
     }
 
-    evaluateValue(evaluator: Evaluator): Value {
+    evaluateValue(evaluator: Evaluator<number>): Value<number> {
         return evaluator.evaluateValue(this);
     }
 }
