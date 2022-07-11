@@ -11,14 +11,26 @@ import { BooleanFunction } from "./BooleanFunction";
 import { ConstanteBooleenne } from "./ConstanteBooleenne";
 import { SousExpression } from "./SousExpression";
 import { FunctionExpression } from "./FunctionExpression";
+import { createValueVariableDeclarationHolder, VariableDeclarationHolder } from "./Holders";
+import { ValueSupplier } from "./ValuePlaceholder";
+
+const variableDeclarationHolder = new VariableDeclarationHolder();
+variableDeclarationHolder.push(new Variable('i', '123'));
+variableDeclarationHolder.push(new Variable('i', '456'));
+
+const valueSupplier: ValueSupplier<number> = new ValueSupplier<number>();
+valueSupplier.push('123', createValue(123));
+valueSupplier.push('456', createValue(456));
+
+const valueVariableDeclarationHolder = createValueVariableDeclarationHolder(variableDeclarationHolder, valueSupplier);
 
 function calculer(expression: Expression) {
     console.log("---------------------------------")
     const userVariables: VariableType = {
-        "c_a": createValue(1),
-        "c_b": createValue(2),
-        "c_c": ValueNotApplicable,
-        "c_d": createValue(4)
+        "c_123": createValue(1),
+        "c_456": createValue(2),
+        "c_789": ValueNotApplicable,
+        "c_321": createValue(4)
     };
 
     const evaluator = new Evaluator<number>(userVariables);
@@ -43,7 +55,7 @@ calculer(
                     new ConstanteMathematique("1")
                 ),
                 new BooleanOperation(
-                    new Variable("a"),
+                    new Variable('i', '123'),
                     "=",
                     new ConstanteMathematique("2")
                 )
@@ -65,7 +77,7 @@ calculer(
                         new ConstanteMathematique("1")
                     ),
                     new BooleanOperation(
-                        new Variable("a"),
+                        new Variable('i', '123'),
                         "=",
                         new ConstanteMathematique("2")
                     )
@@ -77,12 +89,12 @@ calculer(
             new ConstanteMathematique("1")
         ),
         new ArithmetiqueOperation(
-            new Variable("c"),
+            new Variable('i', '789'),
             "+",
-            new Variable("c")
+            new Variable('i', '789'),
         ),
         new ArithmetiqueOperation(
-            new Variable("d"),
+            new Variable('i', '321'),
             "+",
             new ConstanteMathematique("40")
         )
@@ -98,17 +110,17 @@ calculer(
                 new ConstanteMathematique("1")),
             "<>",
             new ArithmetiqueOperation(
-                new Variable("a"),
+                new Variable('i', '123'),
                 "+",
-                new Variable("b"))
+                new Variable('i', '456'))
         ),
         new ArithmetiqueOperation(
-            new Variable("c"),
+            new Variable('i', '789'),
             "+",
-            new Variable("c")
+            new Variable('i', '789')
         ),
         new ArithmetiqueOperation(
-            new Variable("d"),
+            new Variable('i', '321'),
             "+",
             new ConstanteMathematique("40")
         )
@@ -135,12 +147,12 @@ calculer(
     new IfExpression(
         new ConstanteBooleenne("false"),
         new ArithmetiqueOperation(
-            new Variable("c"),
+            new Variable('i', '789'),
             "+",
-            new Variable("c")
+            new Variable('i', '789')
         ),
         new ArithmetiqueOperation(
-            new Variable("d"),
+            new Variable('i', '321'),
             "+",
             new ConstanteMathematique("50")
         )
