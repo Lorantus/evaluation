@@ -9,6 +9,8 @@ import { Variable } from "./Variable";
 import { VariableType } from "./VariableType";
 import { BooleanFunction } from "./BooleanFunction";
 import { ConstanteBooleenne } from "./ConstanteBooleenne";
+import { SousExpression } from "./SousExpression";
+import { FunctionExpression } from "./FunctionExpression";
 
 function calculer(expression: Expression) {
     console.log("---------------------------------")
@@ -142,5 +144,25 @@ calculer(
             "+",
             new ConstanteMathematique("50")
         )
+    )
+);
+
+calculer(
+    new ArithmetiqueOperation(
+        new SousExpression(
+            new ArithmetiqueOperation(
+                new ConstanteMathematique("1"),
+                "*",
+                new ConstanteMathematique("2")
+            )
+        ),
+        "+",
+        new FunctionExpression("Math.cos", [
+            new ArithmetiqueOperation(
+                new ConstanteMathematique("1"),
+                "+",
+                new ConstanteMathematique("0.12")
+            )
+        ])
     )
 );
