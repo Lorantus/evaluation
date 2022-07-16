@@ -17,13 +17,8 @@ export class Variable implements Expression {
         return this.valueId;
     }
 
-    evaluate(evaluator: Evaluator<any>): Evaluation<number> {
-        const value = evaluator.getUserVariable(this.valueId);
-        return new Evaluation()
-            .appendVariable(this.valueId, value);
-    }
-
-    evaluateValue(evaluator: Evaluator<number>): Value<number> {
-        return evaluator.evaluateValue(this);
+    evaluate(evaluator: Evaluator<number>): Evaluator<number> {
+        return evaluator
+            .appendVariable(this.valueId);
     }
 }

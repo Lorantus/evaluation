@@ -24,9 +24,8 @@ export class BooleanOperation implements BooleanExpression {
         private readonly right: Expression) {}
 
     evaluateValue(evaluator: Evaluator<boolean>): Value<boolean> {
-        const evaluatorExpression = Evaluator.createEvaluator<number>(evaluator);
-        const left = evaluatorExpression.evaluateValue(this.left);
-        const right = evaluatorExpression.evaluateValue(this.right);
+        const left = this.left.evaluate(evaluator.generateEvaluator<number>()).evaluateValue();
+        const right = this.right.evaluate(evaluator.generateEvaluator<number>()).evaluateValue();
 
         if(!(left.isValue() && right.isValue())) {
             return booleanValueVoter(left, right);

@@ -1,8 +1,6 @@
 import { BooleanExpression } from "./BooleanExpression";
-import { Evaluation } from "./Evaluation";
 import { Evaluator } from "./Evaluator";
 import { Expression } from "./Expression";
-import { Value } from "./Value";
 
 export class IfExpression implements Expression {
     constructor(
@@ -10,21 +8,16 @@ export class IfExpression implements Expression {
         private readonly leftExpression: Expression,
         private readonly rightExpression: Expression) {}
 
-    evaluate(evaluator: Evaluator<number>): Evaluation<number> {
-        const test = this.test.evaluateValue(Evaluator.createEvaluator<boolean>(evaluator));
+    evaluate(evaluator: Evaluator<number>): Evaluator<number> {
+        const test = this.test.evaluateValue(evaluator);
         if(test.isValue()) {
             const expression = (test.getValue() ? this.leftExpression : this.rightExpression);
-            const value = evaluator.evaluateValue(expression);
-    
-            return new Evaluation()
+            const value = expression.evaluate(evaluator.generateEvaluator<boolean>()).evaluateValue();
+            return evaluator
                 .appendValue(value);
         } else {
-            return new Evaluation()
+            return evaluator
                 .appendValue(test);
         }
-    }
-
-    evaluateValue(evaluator: Evaluator<number>): Value<number> {
-        return evaluator.evaluateValue(this);
     }
 }

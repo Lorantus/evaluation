@@ -11,16 +11,12 @@ const constantesRepository = {
 export class ConstanteMathematique implements Expression {
     constructor(private readonly value: string) {}
 
-    evaluate(evaluator: Evaluator<number>): Evaluation<number> {
+    evaluate(evaluator: Evaluator<number>): Evaluator<number> {
         if(constantesRepository[this.value]) {
-            return new Evaluation()
-                .appendToFormula(constantesRepository[this.value])
+            return evaluator
+                .appendFormula(constantesRepository[this.value]);
         }
-        return new Evaluation()
-            .appendToFormula(this.value);
-    }
-
-    evaluateValue(evaluator: Evaluator<number>): Value<number> {
-        return evaluator.evaluateValue(this);
+        return evaluator
+            .appendFormula(this.value);
     }
 }

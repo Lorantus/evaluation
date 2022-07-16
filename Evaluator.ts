@@ -1,3 +1,4 @@
+import { Evaluable } from "./Evaluable";
 import { Evaluation } from "./Evaluation";
 import { Evaluationable } from "./Evaluationable";
 import { createValue, Value, valueNotComputable } from "./Value";
@@ -9,24 +10,55 @@ function applyEvaluation(formula: string) {
 }
 
 export class Evaluator<T> {
-    constructor(private readonly userVariables: VariableType) { }
+    public constructor(
+        private readonly userVariables: VariableType,
+        private evaluation: Evaluation<T> = new Evaluation<T>()) { }
 
-    static createEvaluator<V>(evaluator: Evaluator<any>) {
-        return new Evaluator<V>(evaluator.userVariables);
+    generateEvaluator<V>() {
+        return new Evaluator<V>({...this.userVariables});
     }
 
-    public getUserVariable(variableName: string): Value<T> {
-        return this.userVariables["c_" + variableName];
+    public appendEvaluationable(evaluationable: Evaluationable<any>): Evaluator<any> {
+        evaluationable.evaluate(this);
+        return this;
     }
 
-    public evaluateValue(evaluationable: Evaluationable<T>): Value<T> {
-        const evaluation = evaluationable.evaluate(this);
-        return this.evaluateEvaluation(evaluation);
+    public chainEvaluator(evaluator: Evaluator<any>): Evaluator<any> {
+        this.evaluation.appendEvaluation(evaluator.evaluation);
+        return this;
     }
 
-    public evaluateEvaluation(evaluation: Evaluation<T>): Value<T> {
+    public appendFormula(formula: string): Evaluator<any> {
+        this.evaluation.appendFormula(formula);
+        return this;
+    }
+
+    public appendVariable(valueId: string) {
+        this.evaluation.appendVariable("_" + this.createVariableName(3), this.userVariables[valueId]);
+        return this;
+    }
+
+    public appendValue(value: Value<any>) {
+        this.evaluation.appendVariable("v" + this.createVariableName(3), value);
+        return this;
+    }
+
+    private createVariableName(length) {
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        return [...Array(length).keys()]
+            .reduce((acc, _) => {
+                return acc + characters.charAt(Math.floor(Math.random() * charactersLength));
+            }, '');
+    }
+
+    public evaluate(evaluable: Evaluable<T>) {
+        return evaluable.evaluateValue(this);
+    }
+
+    public evaluateValue(): Value<T> {
         const variables = {
-            ...evaluation.getVariables(),
+            ...this.evaluation.getVariables(),
         };
         
         let formula;
@@ -43,10 +75,10 @@ export class Evaluator<T> {
                         new RegExp(key, "g"),
                         variables[key].getValue().toString()
                     ),
-                evaluation.getFormula()
+                    this.evaluation.getFormula()
             );
         } else {
-            formula = evaluation.getFormula();
+            formula = this.evaluation.getFormula();
         }
 
         return createValue(applyEvaluation(formula));

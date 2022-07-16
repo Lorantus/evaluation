@@ -34,7 +34,7 @@ export class BooleanFunction implements BooleanExpression {
     evaluateValue(evaluator: Evaluator<boolean>): Value<boolean> {
         const fonction = fonctionsRepository[this.name];
         const value = this.tests.reduce((acc, test) => {
-            const testValue = test.evaluateValue(evaluator);
+            const testValue = test.evaluateValue(evaluator.generateEvaluator<boolean>());
             if(!(testValue.isValue() && acc.isValue())) {
                 return booleanValueVoter(testValue, acc);
             } else {

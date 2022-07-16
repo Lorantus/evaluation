@@ -9,15 +9,11 @@ export class FunctionExpression implements Expression {
         private readonly expressions: Expression[]
     ) { }
 
-    evaluate(evaluator: Evaluator<number>): Evaluation<number> {
-        const evaluation = new Evaluation()
-            .appendToFormula(this.name + "(");
+    evaluate(evaluator: Evaluator<number>): Evaluator<number> {
+        const evaluation = evaluator
+            .appendFormula(this.name + "(");
         return this.expressions
-            .reduce((evaluation, expression) => evaluation.appendEvaluation(expression.evaluate(evaluator)), evaluation)
-            .appendToFormula(")");
-    }
-
-    evaluateValue(evaluator: Evaluator<number>): Value<number> {
-        return evaluator.evaluateValue(this);
+            .reduce((acc, expression) => acc.appendEvaluationable(expression), evaluator)
+            .appendFormula(")");
     }
 }

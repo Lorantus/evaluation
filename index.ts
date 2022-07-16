@@ -27,20 +27,14 @@ const valueVariableDeclarationHolder = createValueVariableDeclarationHolder(vari
 function calculer(expression: Expression) {
     console.log("---------------------------------")
     const userVariables: VariableType = {
-        "c_123": createValue(1),
-        "c_456": createValue(2),
-        "c_789": ValueNotApplicable,
-        "c_321": createValue(4)
+        "123": createValue(1),
+        "456": createValue(2),
+        "789": ValueNotApplicable,
+        "321": createValue(4)
     };
 
-    const evaluator = new Evaluator<number>(userVariables);
-
-    const evaluation = expression.evaluate(evaluator);
-
-    console.log(">" + evaluation.getFormula());
-    console.log("]" + JSON.stringify(evaluation.getVariables()));
-
-    console.log("=" + evaluator.evaluateEvaluation(evaluation).toString());
+    const evaluator = expression.evaluate(new Evaluator<number>(userVariables));
+    console.log("=" + evaluator.evaluateValue().getValue());
 }
 
 calculer(
